@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Website tin tức với các chuyên mục thời sự, thế giới, sức khỏe và đời sống.">
+  <title>Tin Mới 24h | Trang tin tức</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="topbar">
+      <a class="brand" href="#" data-home>
+        <span class="brand-mark">T</span>
+        <span class="brand-text">TIN MỚI <span>24H</span></span>
+      </a>
+      <p class="tagline">Tin tức mỗi ngày — cập nhật góc nhìn mới</p>
+    </div>
+
+    <nav class="navbar" aria-label="Điều hướng chính">
+      <div class="nav-inner">
+        <button class="mobile-menu-button" id="mobile-menu-button"
+                aria-expanded="false" aria-controls="main-menu">
+          ☰ <span>Danh mục</span>
+        </button>
+        <ul id="main-menu" class="main-menu">
+          <li><button class="nav-link active" data-home>Trang chủ</button></li>
+          <li><button class="nav-link" data-category="Mới nhất">Mới nhất</button></li>
+          <!-- Các chuyên mục khác được tạo từ categories.json -->
+          <li class="menu-loading">Đang tải chuyên mục...</li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="welcome-section">
+      <div>
+        <p class="eyebrow">ĐIỂM TIN TRONG NGÀY</p>
+        <h1 id="section-title">Tin tức nổi bật</h1>
+        <p class="welcome-text">
+          Theo dõi những thông tin đáng chú ý qua các chuyên mục tin tức.
+        </p>
+      </div>
+
+      <form class="search-form" id="search-form" role="search">
+        <label class="visually-hidden" for="search-input">Tìm kiếm bài viết</label>
+        <input id="search-input" type="search"
+               placeholder="Tìm kiếm tin tức..." autocomplete="off">
+        <button type="submit">Tìm kiếm</button>
+      </form>
+    </section>
+
+    <section class="news-section" aria-labelledby="news-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">ĐỌC VÀ KHÁM PHÁ</p>
+          <h2 id="news-heading">Tin mới dành cho bạn</h2>
+        </div>
+        <span id="result-count" class="result-count">Đang tải...</span>
+      </div>
+
+      <p id="status-message" class="status-message" role="status">
+        Đang tải dữ liệu bài viết...
+      </p>
+
+      <div id="news-grid" class="news-grid"></div>
+
+      <div id="empty-state" class="empty-state" hidden>
+        <h3>Chưa tìm thấy bài viết</h3>
+        <p>Hãy thử từ khóa khác hoặc chọn một chuyên mục khác.</p>
+        <button id="reset-filter" class="secondary-button">Xem tất cả tin</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main container">
+      <section class="footer-about">
+        <a class="brand footer-brand" href="#" data-home>
+          <span class="brand-mark">T</span>
+          <span class="brand-text">TIN MỚI <span>24H</span></span>
+        </a>
+        <p>
+          Website tin tức phục vụ mục đích học tập, thực hành HTML,
+          CSS và JavaScript. Dữ liệu hiển thị có thể bao gồm nội dung mẫu.
+        </p>
+      </section>
+
+      <section class="footer-column">
+        <h2>Liên kết nhanh</h2>
+        <ul>
+          <li><a href="#" data-home>Xem trang chủ</a></li>
+          <li><a href="#news-heading">Tin mới</a></li>
+          <li><a href="#footer-contact">Liên hệ</a></li>
+        </ul>
+      </section>
+
+      <section class="footer-column">
+        <h2>Chuyên mục</h2>
+        <ul id="footer-categories">
+          <li>Đang tải chuyên mục...</li>
+        </ul>
+      </section>
+
+      <section class="footer-column" id="footer-contact">
+        <h2>Thông tin liên hệ</h2>
+        <ul>
+          <li>Email: <a href="mailto:contact@example.com">contact@example.com</a></li>
+          <li>Địa chỉ: Việt Nam</li>
+        </ul>
+        <h3 class="social-heading">Mạng xã hội</h3>
+        <div class="social-links">
+          <a href="https://www.facebook.com/" target="_blank"
+             rel="noopener noreferrer">Facebook</a>
+          <a href="https://www.youtube.com/" target="_blank"
+             rel="noopener noreferrer">YouTube</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© <span id="current-year"></span> Tin Mới 24h. Website thực hành học tập.</p>
+        <p>Thiết kế bằng HTML, CSS và JavaScript thuần.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
