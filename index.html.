@@ -4,129 +4,1044 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Website tin tức với các chuyên mục thời sự, thế giới, sức khỏe và đời sống.">
-  <title>Tin Mới 24h | Trang tin tức</title>
+  <meta name="description" content="Trang tin tức tổng hợp với giao diện hiện đại, dễ sử dụng.">
+  <title>Tin Tức Mỗi Ngày</title>
+
+  <!-- Sử dụng file CSS hiện có nếu cần -->
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+
+  <style>
+    :root {
+      --blue: #155eef;
+      --dark-blue: #12346b;
+      --light-blue: #eef4ff;
+      --text: #172b4d;
+      --muted: #667085;
+      --border: #e5eaf2;
+      --white: #ffffff;
+      --background: #f6f8fc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .site-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner,
+    .nav-inner,
+    .container,
+    .footer-inner {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      padding: 22px 0;
+    }
+
+    .logo {
+      color: var(--dark-blue);
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: var(--blue);
+    }
+
+    .tagline {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .search-form {
+      display: flex;
+      width: min(390px, 48%);
+      gap: 8px;
+    }
+
+    .search-form input {
+      width: 100%;
+      min-width: 0;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+    }
+
+    .search-form input:focus {
+      border-color: var(--blue);
+    }
+
+    .primary-button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 17px;
+      color: var(--white);
+      background: var(--blue);
+      font-weight: 700;
+    }
+
+    .primary-button:hover {
+      background: var(--dark-blue);
+    }
+
+    .nav-bar {
+      background: var(--dark-blue);
+      color: var(--white);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: stretch;
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .nav-item {
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 14px 15px;
+      border: 0;
+      background: transparent;
+      color: var(--white);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: #2453a6;
+    }
+
+    .submenu {
+      display: none;
+      position: absolute;
+      z-index: 20;
+      top: 100%;
+      left: 0;
+      min-width: 210px;
+      padding: 6px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 12px 28px #172b4d20;
+    }
+
+    .nav-item:hover > .submenu,
+    .nav-item:focus-within > .submenu {
+      display: block;
+    }
+
+    .submenu .nav-link {
+      width: 100%;
+      color: var(--text);
+      text-align: left;
+      border-radius: 6px;
+    }
+
+    .submenu .nav-link:hover {
+      color: var(--blue);
+      background: var(--light-blue);
+    }
+
+    .container {
+      padding: 28px 0 46px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      margin: 0 0 5px;
+      color: var(--dark-blue);
+      font-size: clamp(25px, 4vw, 34px);
+      line-height: 1.25;
+    }
+
+    .page-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .status-message {
+      margin: 14px 0;
+      padding: 12px 15px;
+      color: #344054;
+      background: var(--light-blue);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 22px;
+    }
+
+    .filter-chip {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--white);
+      color: var(--text);
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--light-blue);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--dark-blue);
+    }
+
+    .result-count {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .news-card {
+      min-width: 0;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px #172b4d12;
+    }
+
+    .news-image {
+      display: block;
+      width: 100%;
+      height: 205px;
+      object-fit: cover;
+      background: #e8eef8;
+    }
+
+    .image-placeholder {
+      display: grid;
+      place-items: center;
+      height: 205px;
+      color: var(--muted);
+      background: var(--light-blue);
+    }
+
+    .news-content {
+      padding: 18px;
+    }
+
+    .news-category {
+      display: inline-block;
+      margin-bottom: 9px;
+      padding: 4px 9px;
+      border-radius: 5px;
+      color: var(--blue);
+      background: var(--light-blue);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .news-title {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .news-title button {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--text);
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .news-title button:hover {
+      color: var(--blue);
+    }
+
+    .news-excerpt {
+      display: -webkit-box;
+      overflow: hidden;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .news-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .read-more {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 40px 20px;
+      border: 1px dashed #c8d3e5;
+      border-radius: 12px;
+      color: var(--muted);
+      text-align: center;
+      background: var(--white);
+    }
+
+    .site-footer {
+      padding: 32px 0;
+      color: #e8eefb;
+      background: var(--dark-blue);
+    }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 28px;
+    }
+
+    .site-footer h2,
+    .site-footer h3 {
+      margin: 0 0 10px;
+      color: var(--white);
+    }
+
+    .site-footer p {
+      margin: 5px 0;
+      color: #c8d5ed;
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 7px;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: #101828a8;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      position: relative;
+      width: min(760px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      border-radius: 14px;
+      background: var(--white);
+    }
+
+    .modal-close {
+      position: sticky;
+      float: right;
+      top: 0;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--light-blue);
+      color: var(--dark-blue);
+      font-size: 22px;
+    }
+
+    .modal-panel h2 {
+      margin: 12px 0;
+      color: var(--dark-blue);
+      line-height: 1.35;
+    }
+
+    .modal-panel img {
+      display: block;
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      border-radius: 9px;
+    }
+
+    .modal-body {
+      white-space: pre-line;
+    }
+
+    @media (max-width: 850px) {
+      .news-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-about {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .search-form {
+        width: 100%;
+      }
+
+      .nav-inner {
+        width: 100%;
+        padding: 0 4%;
+      }
+
+      .nav-link {
+        padding: 12px 11px;
+      }
+
+      .container {
+        padding-top: 22px;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .news-image,
+      .image-placeholder {
+        height: 220px;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-about {
+        grid-column: auto;
+      }
+
+      .modal-panel {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header class="site-header">
-    <div class="topbar">
-      <a class="brand" href="#" data-home>
-        <span class="brand-mark">T</span>
-        <span class="brand-text">TIN MỚI <span>24H</span></span>
-      </a>
-      <p class="tagline">Tin tức mỗi ngày — cập nhật góc nhìn mới</p>
-    </div>
-
-    <nav class="navbar" aria-label="Điều hướng chính">
-      <div class="nav-inner">
-        <button class="mobile-menu-button" id="mobile-menu-button"
-                aria-expanded="false" aria-controls="main-menu">
-          ☰ <span>Danh mục</span>
-        </button>
-        <ul id="main-menu" class="main-menu">
-          <li><button class="nav-link active" data-home>Trang chủ</button></li>
-          <li><button class="nav-link" data-category="Mới nhất">Mới nhất</button></li>
-          <!-- Các chuyên mục khác được tạo từ categories.json -->
-          <li class="menu-loading">Đang tải chuyên mục...</li>
-        </ul>
+    <div class="header-inner">
+      <div>
+        <a class="logo" href="./" aria-label="Trang chủ">TIN TỨC <span>MỖI NGÀY</span></a>
+        <p class="tagline">Cập nhật thông tin, kết nối cuộc sống</p>
       </div>
-    </nav>
+
+      <form class="search-form" id="searchForm" role="search">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Tìm kiếm tin tức..."
+          aria-label="Tìm kiếm tin tức"
+        >
+        <button class="primary-button" type="submit">Tìm</button>
+      </form>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="welcome-section">
-      <div>
-        <p class="eyebrow">ĐIỂM TIN TRONG NGÀY</p>
-        <h1 id="section-title">Tin tức nổi bật</h1>
-        <p class="welcome-text">
-          Theo dõi những thông tin đáng chú ý qua các chuyên mục tin tức.
-        </p>
-      </div>
+  <nav class="nav-bar" aria-label="Danh mục tin tức">
+    <div class="nav-inner" id="navMenu">
+      <a class="nav-link active" href="./" data-home>Trang chủ</a>
+    </div>
+  </nav>
 
-      <form class="search-form" id="search-form" role="search">
-        <label class="visually-hidden" for="search-input">Tìm kiếm bài viết</label>
-        <input id="search-input" type="search"
-               placeholder="Tìm kiếm tin tức..." autocomplete="off">
-        <button type="submit">Tìm kiếm</button>
-      </form>
+  <main class="container">
+    <section class="page-heading">
+      <h1 id="pageTitle">Tin tức mới nhất</h1>
+      <p>Các tin tức được tổng hợp theo từng chuyên mục.</p>
     </section>
 
-    <section class="news-section" aria-labelledby="news-heading">
+    <div id="statusMessage" class="status-message" role="status" hidden></div>
+
+    <section aria-label="Lọc tin tức">
+      <div class="filter-row" id="filterRow">
+        <button class="filter-chip active" type="button" data-filter="all">
+          Tất cả tin
+        </button>
+      </div>
+    </section>
+
+    <section aria-labelledby="newsHeading">
       <div class="section-heading">
-        <div>
-          <p class="eyebrow">ĐỌC VÀ KHÁM PHÁ</p>
-          <h2 id="news-heading">Tin mới dành cho bạn</h2>
-        </div>
-        <span id="result-count" class="result-count">Đang tải...</span>
+        <h2 id="newsHeading">Bài viết nổi bật</h2>
+        <span class="result-count" id="resultCount"></span>
       </div>
 
-      <p id="status-message" class="status-message" role="status">
-        Đang tải dữ liệu bài viết...
-      </p>
-
-      <div id="news-grid" class="news-grid"></div>
-
-      <div id="empty-state" class="empty-state" hidden>
-        <h3>Chưa tìm thấy bài viết</h3>
-        <p>Hãy thử từ khóa khác hoặc chọn một chuyên mục khác.</p>
-        <button id="reset-filter" class="secondary-button">Xem tất cả tin</button>
+      <div class="news-grid" id="newsGrid">
+        <div class="empty-state">Đang tải tin tức...</div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="footer-main container">
+    <div class="footer-inner">
       <section class="footer-about">
-        <a class="brand footer-brand" href="#" data-home>
-          <span class="brand-mark">T</span>
-          <span class="brand-text">TIN MỚI <span>24H</span></span>
-        </a>
-        <p>
-          Website tin tức phục vụ mục đích học tập, thực hành HTML,
-          CSS và JavaScript. Dữ liệu hiển thị có thể bao gồm nội dung mẫu.
-        </p>
+        <h2>TIN TỨC MỖI NGÀY</h2>
+        <p>Website thực hành xây dựng trang tin tức bằng HTML, CSS, JavaScript và dữ liệu JSON.</p>
+        <p>Thông tin mẫu cần được kiểm tra trước khi sử dụng như tin tức thực tế.</p>
       </section>
 
-      <section class="footer-column">
-        <h2>Liên kết nhanh</h2>
-        <ul>
-          <li><a href="#" data-home>Xem trang chủ</a></li>
-          <li><a href="#news-heading">Tin mới</a></li>
-          <li><a href="#footer-contact">Liên hệ</a></li>
-        </ul>
+      <section>
+        <h3>Chuyên mục</h3>
+        <div class="footer-links" id="footerCategories">
+          <a href="./">Trang chủ</a>
+        </div>
       </section>
 
-      <section class="footer-column">
-        <h2>Chuyên mục</h2>
-        <ul id="footer-categories">
-          <li>Đang tải chuyên mục...</li>
-        </ul>
-      </section>
-
-      <section class="footer-column" id="footer-contact">
-        <h2>Thông tin liên hệ</h2>
-        <ul>
-          <li>Email: <a href="mailto:contact@example.com">contact@example.com</a></li>
-          <li>Địa chỉ: Việt Nam</li>
-        </ul>
-        <h3 class="social-heading">Mạng xã hội</h3>
-        <div class="social-links">
-          <a href="https://www.facebook.com/" target="_blank"
-             rel="noopener noreferrer">Facebook</a>
-          <a href="https://www.youtube.com/" target="_blank"
-             rel="noopener noreferrer">YouTube</a>
+      <section>
+        <h3>Thông tin</h3>
+        <div class="footer-links">
+          <a href="#newsHeading">Tin mới nhất</a>
+          <a href="#searchInput">Tìm kiếm bài viết</a>
         </div>
       </section>
     </div>
-
-    <div class="footer-bottom">
-      <div class="container footer-bottom-inner">
-        <p>© <span id="current-year"></span> Tin Mới 24h. Website thực hành học tập.</p>
-        <p>Thiết kế bằng HTML, CSS và JavaScript thuần.</p>
-      </div>
-    </div>
   </footer>
+
+  <div class="modal" id="articleModal" role="dialog" aria-modal="true"
+       aria-labelledby="modalTitle">
+    <article class="modal-panel">
+      <button class="modal-close" id="modalClose" type="button"
+              aria-label="Đóng bài viết">×</button>
+      <div id="modalContent"></div>
+    </article>
+  </div>
+
+  <script>
+    const navMenu = document.getElementById("navMenu");
+    const filterRow = document.getElementById("filterRow");
+    const newsGrid = document.getElementById("newsGrid");
+    const searchForm = document.getElementById("searchForm");
+    const searchInput = document.getElementById("searchInput");
+    const pageTitle = document.getElementById("pageTitle");
+    const resultCount = document.getElementById("resultCount");
+    const statusMessage = document.getElementById("statusMessage");
+    const footerCategories = document.getElementById("footerCategories");
+    const articleModal = document.getElementById("articleModal");
+    const modalContent = document.getElementById("modalContent");
+    const modalClose = document.getElementById("modalClose");
+
+    let categories = [];
+    let posts = [];
+    let activeCategory = "all";
+    let searchTerm = "";
+
+    function showStatus(message) {
+      statusMessage.textContent = message;
+      statusMessage.hidden = !message;
+    }
+
+    function normalizeText(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("vi");
+    }
+
+    function safeDate(value) {
+      if (!value) return "";
+      const date = new Date(String(value).replace(" ", "T"));
+      if (Number.isNaN(date.getTime())) return String(value);
+
+      return new Intl.DateTimeFormat("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }).format(date);
+    }
+
+    function createNavItem(category) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "nav-item";
+
+      const link = document.createElement("a");
+      link.className = "nav-link";
+      link.href = category.url || "#";
+      link.textContent = category.title || "Chuyên mục";
+
+      if (category.type === "external") {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      } else {
+        link.href = "#newsHeading";
+        link.dataset.category = category.title || "";
+        link.addEventListener("click", function(event) {
+          event.preventDefault();
+          setCategory(category.title || "all");
+        });
+      }
+
+      wrapper.appendChild(link);
+
+      const children = Array.isArray(category.children)
+        ? category.children.filter(child => child.type !== "home")
+        : [];
+
+      if (children.length) {
+        const submenu = document.createElement("div");
+        submenu.className = "submenu";
+
+        children.forEach(child => {
+          submenu.appendChild(createNavItem(child));
+        });
+
+        wrapper.appendChild(submenu);
+      }
+
+      return wrapper;
+    }
+
+    function getAllCategories(items, output = []) {
+      items.forEach(category => {
+        if (category.type === "category" && category.title) {
+          output.push(category);
+        }
+
+        if (Array.isArray(category.children)) {
+          getAllCategories(category.children, output);
+        }
+      });
+
+      return output;
+    }
+
+    function renderMenu() {
+      navMenu.replaceChildren();
+
+      const homeLink = document.createElement("a");
+      homeLink.className = "nav-link active";
+      homeLink.href = "./";
+      homeLink.textContent = "Trang chủ";
+      homeLink.dataset.home = "";
+      homeLink.addEventListener("click", event => {
+        event.preventDefault();
+        setCategory("all");
+      });
+      navMenu.appendChild(homeLink);
+
+      // Bỏ mục type "home" để tránh lặp lại Trang chủ.
+      categories
+        .filter(category => category.type !== "home")
+        .forEach(category => {
+          navMenu.appendChild(createNavItem(category));
+        });
+
+      renderFilters();
+      renderFooterCategories();
+    }
+
+    function renderFilters() {
+      filterRow.replaceChildren();
+
+      const allButton = document.createElement("button");
+      allButton.type = "button";
+      allButton.className = "filter-chip";
+      allButton.textContent = "Tất cả tin";
+      allButton.dataset.filter = "all";
+      allButton.addEventListener("click", () => setCategory("all"));
+      filterRow.appendChild(allButton);
+
+      const uniqueNames = [...new Set(
+        getAllCategories(categories)
+          .map(category => category.title)
+          .filter(Boolean)
+      )];
+
+      uniqueNames.forEach(name => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "filter-chip";
+        button.textContent = name;
+        button.dataset.filter = name;
+        button.addEventListener("click", () => setCategory(name));
+        filterRow.appendChild(button);
+      });
+
+      updateActiveFilters();
+    }
+
+    function renderFooterCategories() {
+      footerCategories.replaceChildren();
+
+      const names = [...new Set(
+        getAllCategories(categories)
+          .map(category => category.title)
+          .filter(Boolean)
+      )].slice(0, 8);
+
+      names.forEach(name => {
+        const link = document.createElement("a");
+        link.href = "#newsHeading";
+        link.textContent = name;
+        link.addEventListener("click", event => {
+          event.preventDefault();
+          setCategory(name);
+        });
+        footerCategories.appendChild(link);
+      });
+    }
+
+    function updateActiveFilters() {
+      document.querySelectorAll("[data-filter]").forEach(button => {
+        button.classList.toggle(
+          "active",
+          button.dataset.filter === activeCategory
+        );
+      });
+
+      document.querySelectorAll("[data-category]").forEach(link => {
+        link.classList.toggle(
+          "active",
+          link.dataset.category === activeCategory
+        );
+      });
+
+      const home = document.querySelector("[data-home]");
+      if (home) {
+        home.classList.toggle("active", activeCategory === "all");
+      }
+    }
+
+    function setCategory(categoryName) {
+      activeCategory = categoryName || "all";
+      pageTitle.textContent = activeCategory === "all"
+        ? (searchTerm ? "Kết quả tìm kiếm" : "Tin tức mới nhất")
+        : "Chuyên mục: " + activeCategory;
+
+      updateActiveFilters();
+      renderPosts();
+    }
+
+    function getFilteredPosts() {
+      return posts.filter(post => {
+        const categoryMatches =
+          activeCategory === "all" ||
+          normalizeText(post.category) === normalizeText(activeCategory);
+
+        const searchableText = normalizeText([
+          post.title,
+          post.excerpt,
+          post.content,
+          post.category,
+          post.author
+        ].join(" "));
+
+        const searchMatches =
+          !searchTerm || searchableText.includes(normalizeText(searchTerm));
+
+        return categoryMatches && searchMatches;
+      });
+    }
+
+    function renderPosts() {
+      const filteredPosts = getFilteredPosts();
+      newsGrid.replaceChildren();
+      resultCount.textContent = filteredPosts.length + " bài viết";
+
+      if (filteredPosts.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "Không tìm thấy bài viết phù hợp. Hãy thử từ khóa hoặc chuyên mục khác.";
+        newsGrid.appendChild(empty);
+        return;
+      }
+
+      filteredPosts.forEach(post => {
+        const card = document.createElement("article");
+        card.className = "news-card";
+
+        if (post.image) {
+          const image = document.createElement("img");
+          image.className = "news-image";
+          image.src = post.image;
+          image.alt = post.title || "Ảnh bài viết";
+          image.loading = "lazy";
+          image.onerror = () => {
+            const placeholder = document.createElement("div");
+            placeholder.className = "image-placeholder";
+            placeholder.textContent = "Chưa có hình ảnh";
+            image.replaceWith(placeholder);
+          };
+          card.appendChild(image);
+        } else {
+          const placeholder = document.createElement("div");
+          placeholder.className = "image-placeholder";
+          placeholder.textContent = "Chưa có hình ảnh";
+          card.appendChild(placeholder);
+        }
+
+        const content = document.createElement("div");
+        content.className = "news-content";
+
+        const category = document.createElement("span");
+        category.className = "news-category";
+        category.textContent = post.category || "Tin tức";
+
+        const heading = document.createElement("h3");
+        heading.className = "news-title";
+
+        const titleButton = document.createElement("button");
+        titleButton.type = "button";
+        titleButton.textContent = post.title || "Bài viết chưa có tiêu đề";
+        titleButton.addEventListener("click", () => openArticle(post));
+        heading.appendChild(titleButton);
+
+        const excerpt = document.createElement("p");
+        excerpt.className = "news-excerpt";
+        excerpt.textContent = post.excerpt || "";
+
+        const meta = document.createElement("div");
+        meta.className = "news-meta";
+
+        const date = document.createElement("span");
+        date.textContent = safeDate(post.publishedAt) || "Chưa có ngày đăng";
+
+        const author = document.createElement("span");
+        author.textContent = post.author || "Ban biên tập";
+
+        meta.append(date, author);
+
+        const readMore = document.createElement("button");
+        readMore.type = "button";
+        readMore.className = "read-more";
+        readMore.textContent = "Đọc chi tiết →";
+        readMore.addEventListener("click", () => openArticle(post));
+
+        content.append(category, heading, excerpt, meta, readMore);
+        card.appendChild(content);
+        newsGrid.appendChild(card);
+      });
+    }
+
+    function openArticle(post) {
+      modalContent.replaceChildren();
+
+      const closeButton = modalClose.cloneNode(true);
+      closeButton.addEventListener("click", closeArticle);
+      modalContent.appendChild(closeButton);
+
+      const category = document.createElement("span");
+      category.className = "news-category";
+      category.textContent = post.category || "Tin tức";
+
+      const title = document.createElement("h2");
+      title.id = "modalTitle";
+      title.textContent = post.title || "Chi tiết bài viết";
+
+      const meta = document.createElement("p");
+      meta.className = "news-meta";
+      meta.textContent = [
+        post.author || "Ban biên tập",
+        safeDate(post.publishedAt)
+      ].filter(Boolean).join(" · ");
+
+      modalContent.append(category, title, meta);
+
+      if (post.image) {
+        const image = document.createElement("img");
+        image.src = post.image;
+        image.alt = post.title || "Ảnh bài viết";
+        image.style.marginBottom = "18px";
+        image.onerror = () => image.remove();
+        modalContent.appendChild(image);
+      }
+
+      const body = document.createElement("p");
+      body.className = "modal-body";
+      body.textContent = post.content || post.excerpt || "Chưa có nội dung chi tiết.";
+      modalContent.appendChild(body);
+
+      if (post.url && !post.url.includes("example.com")) {
+        const sourceLink = document.createElement("a");
+        sourceLink.href = post.url;
+        sourceLink.target = "_blank";
+        sourceLink.rel = "noopener noreferrer";
+        sourceLink.className = "read-more";
+        sourceLink.textContent = "Đọc bài tại nguồn →";
+        modalContent.appendChild(sourceLink);
+      }
+
+      articleModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+      modalClose = closeButton;
+    }
+
+    function closeArticle() {
+      articleModal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    searchForm.addEventListener("submit", event => {
+      event.preventDefault();
+      searchTerm = searchInput.value.trim();
+      pageTitle.textContent = searchTerm
+        ? "Kết quả tìm kiếm"
+        : "Tin tức mới nhất";
+      renderPosts();
+    });
+
+    searchInput.addEventListener("input", () => {
+      searchTerm = searchInput.value.trim();
+      pageTitle.textContent = searchTerm
+        ? "Kết quả tìm kiếm"
+        : (activeCategory === "all"
+          ? "Tin tức mới nhất"
+          : "Chuyên mục: " + activeCategory);
+      renderPosts();
+    });
+
+    articleModal.addEventListener("click", event => {
+      if (event.target === articleModal) closeArticle();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeArticle();
+    });
+
+    async function loadWebsiteData() {
+      try {
+        showStatus("Đang tải dữ liệu website...");
+
+        const [categoriesResponse, postsResponse] = await Promise.all([
+          fetch("categories.json", { cache: "no-store" }),
+          fetch("posts.json", { cache: "no-store" })
+        ]);
+
+        if (!categoriesResponse.ok) {
+          throw new Error("Không tải được categories.json (HTTP " + categoriesResponse.status + ").");
+        }
+
+        if (!postsResponse.ok) {
+          throw new Error("Không tải được posts.json (HTTP " + postsResponse.status + ").");
+        }
+
+        const categoriesData = await categoriesResponse.json();
+        const postsData = await postsResponse.json();
+
+        if (!Array.isArray(categoriesData.menu)) {
+          throw new Error("categories.json cần có thuộc tính menu là một danh sách.");
+        }
+
+        if (!Array.isArray(postsData)) {
+          throw new Error("posts.json cần chứa một danh sách bài viết.");
+        }
+
+        categories = categoriesData.menu;
+        posts = postsData;
+
+        renderMenu();
+        renderPosts();
+        showStatus("");
+      } catch (error) {
+        console.error("Lỗi tải dữ liệu:", error);
+        showStatus(
+          "Không thể tải dữ liệu: " + error.message +
+          " Hãy kiểm tra tên file, vị trí file và cách chạy website."
+        );
+        newsGrid.replaceChildren();
+
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "Chưa thể hiển thị bài viết. Vui lòng kiểm tra thông báo phía trên.";
+        newsGrid.appendChild(empty);
+      }
+    }
+
+    loadWebsiteData();
+  </script>
 </body>
 </html>
