@@ -286,10 +286,29 @@
 
 <body>
   <header class="site-header">
-    <h1>TIN TỨC MỖI NGÀY</h1>
-    <p>Cập nhật tin tức mới nhất mỗi ngày</p>
-  </header>
+  <div class="header-inner">
+    <div>
+      <h1>TIN TỨC MỖI NGÀY</h1>
+      <p>Cập nhật tin tức mới nhất mỗi ngày</p>
+    </div>
 
+    <form id="searchForm" class="search-form" role="search">
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Tìm kiếm tin tức..."
+        aria-label="Tìm kiếm tin tức"
+      >
+      <button type="submit">Tìm kiếm</button>
+    </form>
+  </div>
+</header>
+
+<nav class="nav-bar" aria-label="Danh mục tin tức">
+  <div id="navMenu" class="nav-inner">
+    <a href="./" class="nav-link active" data-home>Trang chủ</a>
+  </div>
+</nav>
   <main class="page-container">
 
     <!-- Các nút lọc chuyên mục -->
