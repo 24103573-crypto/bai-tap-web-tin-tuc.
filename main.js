@@ -347,6 +347,126 @@ document.addEventListener("DOMContentLoaded", () => {
     filterByCategory(categoryName);
   });
 
+    // ===== TÌM KIẾM BÀI VIẾT =====
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  let currentCategory = "";
+
+  function searchPosts(keyword) {
+    const query = normalizeText(keyword);
+
+    const filtered = allPosts.filter((post) => {
+      const searchableText = normalizeText([
+        getTitle(post),
+        getSummary(post),
+        getCategory(post)
+      ].join(" "));
+
+      const matchesKeyword = !query || searchableText.includes(query);
+      const matchesCategory =
+        !currentCategory ||
+        currentCategory === "tất cả tin" ||
+        currentCategory === "tất cả" ||
+        normalizeText(getCategory(post)) === normalizeText(currentCategory);
+
+      return matchesKeyword && matchesCategory;
+    });
+
+    renderPosts(filtered, currentCategory);
+  }
+
+  if (searchForm && searchInput) {
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      searchPosts(searchInput.value);
+    });
+
+    searchInput.addEventListener("input", () => {
+      searchPosts(searchInput.value);
+    });
+  }
+
+  // ===== TẢI MENU TỪ categories.json =====
+  const navMenu = document.getElementById("navMenu");
+
+  function createMenuItem(category) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "nav-item";
+
+    const link = document.createElement("a");
+    link.className = "nav-link";
+    link.textContent = category.title || category.name || "Danh mục";
+    link.href = category.url || "#";
+
+    const hasChildren =
+      Array.isArray(category.children) && category.children.length > 0;
+
+    if (hasChildren) {
+      link.href = category.url || "#";
+      link.setAttribute("aria-haspopup", "true");
+
+      const submenu = document.createElement("div");
+      submenu.className = "submenu";
+
+      category.children.forEach((child) => {
+        submenu.appendChild(createMenuItem(child));
+      });
+
+      wrapper.appendChild(link);
+      wrapper.appendChild(submenu);
+    } else {
+      wrapper.appendChild(link);
+    }
+
+    if (category.type === "external") {
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    }
+
+    if (category.type === "home") {
+      link.href = "./";
+    } else {
+      link.addEventListener("click", (event) => {
+        if (!category.url || category.url === "#") {
+          event.preventDefault();
+          currentCategory = category.title || category.name || "";
+          searchPosts(searchInput ? searchInput.value : "");
+        }
+      });
+    }
+
+    return wrapper;
+  }
+
+  async function loadCategories() {
+    if (!navMenu) return;
+
+    try {
+      const response = await fetch("categories.json");
+      if (!response.ok) {
+        throw new Error("Không tải được categories.json");
+      }
+
+      const data = await response.json();
+      const categories = Array.isArray(data)
+        ? data
+        : Array.isArray(data.categories)
+          ? data.categories
+          : [];
+
+      if (categories.length === 0) return;
+
+      navMenu.replaceChildren();
+
+      categories.forEach((category) => {
+        navMenu.appendChild(createMenuItem(category));
+      });
+    } catch (error) {
+      console.error("Lỗi tải menu:", error);
+    }
+  }
+
+  loadCategories();
   // Đọc dữ liệu bài viết từ file JSON.
   async function loadPosts() {
     try {
