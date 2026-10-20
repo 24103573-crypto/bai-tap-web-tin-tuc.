@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết bài viết | Tin Tức Mỗi Ngày</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #172b4d;
+      background: #f5f7fc;
+      line-height: 1.7;
+    }
+
+    header {
+      padding: 22px 20px;
+      background: #fff;
+      border-bottom: 1px solid #e5eaf2;
+    }
+
+    .header-inner,
+    main,
+    footer {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .site-name {
+      margin: 0;
+      color: #155eef;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #155eef;
+      text-decoration: none;
+    }
+
+    main {
+      margin-top: 30px;
+      margin-bottom: 50px;
+      padding: 28px;
+      border: 1px solid #e5eaf2;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .category {
+      color: #155eef;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    h1 {
+      margin: 10px 0;
+      color: #12346b;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.3;
+    }
+
+    .meta {
+      margin-bottom: 22px;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .cover {
+      display: block;
+      width: 100%;
+      max-height: 460px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #edf3ff;
+    }
+
+    .summary {
+      margin: 22px 0;
+      color: #475467;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .content {
+      color: #344054;
+      font-size: 17px;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .message {
+      color: #667085;
+      text-align: center;
+    }
+
+    footer {
+      padding: 20px 0 30px;
+      color: #667085;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        margin-top: 16px;
+        padding: 18px;
+      }
+
+      .summary {
+        font-size: 16px;
+      }
+
+      .content {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-inner">
+      <p class="site-name">TIN TỨC MỖI NGÀY</p>
+      <a class="back-link" href="index.html">← Quay lại trang chủ</a>
+    </div>
+  </header>
+
+  <main id="article">
+    <p class="message">Đang tải bài viết...</p>
+  </main>
+
+  <footer>
+    © Tin Tức Mỗi Ngày
+  </footer>
+
+  <script>
+    // Lấy ID bài viết từ URL, ví dụ detail.html?id=dtri-001
+    const params = new URLSearchParams(window.location.search);
+    const articleId = params.get("id");
+    const articleContainer = document.getElementById("article");
+
+    // Tạo phần tử văn bản an toàn.
+    function createElement(tag, className, text) {
+      const element = document.createElement(tag);
+      element.className = className;
+      element.textContent = text;
+      return element;
+    }
+
+    // Hỗ trợ một số tên trường thường dùng trong posts.json.
+    function getValue(post, keys, fallback = "") {
+      for (const key of keys) {
+        if (
+          post[key] !== undefined &&
+          post[key] !== null &&
+          post[key] !== ""
+        ) {
+          return post[key];
+        }
+      }
+      return fallback;
+    }
+
+    async function loadArticle() {
+      if (!articleId) {
+        articleContainer.replaceChildren(
+          createElement(
+            "p",
+            "message",
+            "Đường dẫn chưa có ID bài viết. Hãy quay lại trang chủ và chọn một bài."
+          )
+        );
+        return;
+      }
+
+      try {
+        const response = await fetch("posts.json");
+
+        if (!response.ok) {
+          throw new Error("Không tải được posts.json.");
+        }
+
+        const data = await response.json();
+        const posts = Array.isArray(data)
+          ? data
+          : Array.isArray(data.posts)
+            ? data.posts
+            : [];
+
+        const post = posts.find((item) =>
+          String(getValue(item, ["id", "postId", "slug"])) === articleId
+        );
+
+        if (!post) {
+          articleContainer.replaceChildren(
+            createElement(
+              "p",
+              "message",
+              "Không tìm thấy bài viết. Bài viết có thể không tồn tại hoặc ID không khớp."
+            )
+          );
+          return;
+        }
+
+        const title = getValue(
+          post,
+          ["title", "name"],
+          "Chưa có tiêu đề"
+        );
+
+        const category = getValue(
+          post,
+          ["category", "categoryName", "categoryTitle"],
+          "Tin tức"
+        );
+
+        const summary = getValue(
+          post,
+          ["summary", "excerpt", "description"],
+          ""
+        );
+
+        const content = getValue(
+          post,
+          ["content", "body", "fullContent", "article"],
+          summary || "Bài viết chưa có nội dung chi tiết."
+        );
+
+        const date = getValue(
+          post,
+          ["publishedAt", "publishDate", "date", "createdAt"],
+          ""
+        );
+
+        const imageUrl = getValue(
+          post,
+          ["image", "imageUrl", "thumbnail", "thumbnailUrl", "cover"],
+          ""
+        );
+
+        articleContainer.replaceChildren();
+
+        articleContainer.appendChild(
+          createElement("div", "category", category)
+        );
+
+        articleContainer.appendChild(
+          createElement("h1", "", title)
+        );
+
+        if (date) {
+          const time = createElement("p", "meta", date);
+          articleContainer.appendChild(time);
+        }
+
+        if (imageUrl) {
+          const image = document.createElement("img");
+          image.className = "cover";
+          image.src = imageUrl;
+          image.alt = title;
+
+          image.addEventListener("error", () => {
+            image.remove();
+          });
+
+          articleContainer.appendChild(image);
+        }
+
+        if (summary) {
+          articleContainer.appendChild(
+            createElement("p", "summary", summary)
+          );
+        }
+
+        articleContainer.appendChild(
+          createElement("div", "content", content)
+        );
+
+        document.title = title + " | Tin Tức Mỗi Ngày";
+      } catch (error) {
+        console.error(error);
+
+        articleContainer.replaceChildren(
+          createElement(
+            "p",
+            "message",
+            "Không thể tải bài viết. Vui lòng kiểm tra file posts.json."
+          )
+        );
+      }
+    }
+
+    loadArticle();
+  </script>
+</body>
+</html>
